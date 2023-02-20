@@ -1,8 +1,9 @@
-const productName = 'Холодильник';
-const productSum = 30;
-const productCategory = 'Бытовая техника';
-const productPrice = 30500;
+const productName = prompt('Введите название товара');
+const productSum = +prompt('Введите количество товара');
+const productCategory = prompt('Назовите категорию товара');
+const productPrice = +prompt('Укажите стоимость одной единицы товара');
 
-console.log(productName);
+console.log(typeof productSum);
+console.log(typeof productPrice);
 
-console.log(`Всего холодильников на сумму: ${productSum * productPrice} руб.`);
+console.log(`На складе ${productSum} единицы товара "${productName}" на сумму ${productSum * productPrice} деревянных.`);
