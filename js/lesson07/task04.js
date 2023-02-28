@@ -5,9 +5,7 @@ const getLeapYear = (startYear, finishYear) => {
     arr[i] = startYear + i;
   };
 
-  const newArr = arr.map(item => {
-    return item;
-  }).filter(elem => elem % 4 === 0).join(', ')
+  const newArr = arr.map(item => item).filter(elem => elem % 4 === 0).join(', ')
 
   return `Високосные года - ${newArr}`;
 };
