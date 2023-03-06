@@ -16,11 +16,9 @@ const cart = {
     this.count += num;
   },
   calculateItemPrice: function() {
-    let sum = this.items.map(item => {
-      return item.price * item.productCount;
-    }).reduce((acc, item) => {
-      return acc + item;
-    })
+    let sum = this.items.reduce((acc, item) => {
+      return acc + item.price * item.productCount;
+    }, 0);
     return sum;
   },
   clear: function() {
