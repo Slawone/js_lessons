@@ -15,7 +15,7 @@ const cart = {
     this.increaseCount(productCount);
   },
   increaseCount: function(num) {
-    return this.count += num;
+    this.count += num;
   },
   calculateItemPrice: function(price, productCount) {
     this.totalPrice += price * productCount;
