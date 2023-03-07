@@ -1,10 +1,12 @@
+'use strict';
+
 const cart = {
   items: [],
   count: 0,
   get totalPrice() {
     return this.calculateItemPrice();
   },
-  add: function(product, price, productCount = 1) {
+  add(product, price, productCount = 1) {
     this.items.push({
       product,
       price,
@@ -12,16 +14,15 @@ const cart = {
     });
     this.increaseCount(productCount);
   },
-  increaseCount: function(num) {
+  increaseCount(num) {
     this.count += num;
   },
-  calculateItemPrice: function() {
-    let sum = this.items.reduce((acc, item) => {
-      return acc + item.price * item.productCount;
-    }, 0);
+  calculateItemPrice() {
+    const sum = this.items.reduce((acc, item) =>
+      acc + item.price * item.productCount, 0);
     return sum;
   },
-  clear: function() {
+  clear() {
     const newCart = {
       items: [],
       totalPrice: 0,
@@ -29,7 +30,7 @@ const cart = {
     };
     Object.assign(this, newCart);
   },
-  print: function() {
+  print() {
     const jsonItems = JSON.stringify(this.items);
     const price = this.totalPrice;
     console.log(jsonItems);
