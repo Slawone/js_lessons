@@ -3,6 +3,30 @@
 (() => {
   const FIGURES_RUS = ['камень', 'ножницы', 'бумага'];
   const FIGURES_ENG = ['rock', 'scissors', 'paper'];
+  const enPhrases = {
+    prompt: 'rock, scissors, paper?',
+    gameOver: 'Game over!',
+    wrongInput: 'Wrong input',
+    again: 'Again?',
+    rock: 'rock',
+    scissors: 'scissors',
+    paper: 'paper',
+    draw: 'Draw',
+    playerWon: 'You won!',
+    computerWon: 'Computer won!',
+  };
+  const ruPhrases = {
+    prompt: 'камень, ножницы, бумага?',
+    gameOver: 'Игра окончена!',
+    wrongInput: 'Неправильный ввод',
+    again: 'Еще разок?',
+    rock: 'камень',
+    scissors: 'ножницы',
+    paper: 'бумага',
+    draw: 'Ничья',
+    playerWon: 'Вы выиграли!',
+    computerWon: 'Компьютер выиграл!',
+  };
 
   const getRandomNumber = (min, max) =>
     Math.floor(Math.random() * (max - min + 1) + min);
@@ -39,117 +63,69 @@
       return str;
     };
 
+    const langPhrases = lang === 'EN' || lang === 'ENG' ? enPhrases : ruPhrases;
+    const figures = lang === 'EN' || lang === 'ENG' ? FIGURES_ENG : FIGURES_RUS;
+
     return function start() {
-      if (lang === 'EN' || lang === 'ENG') {
-        let userAnswer = prompt('rock, scissors, paper?');
+      let userAnswer = prompt(langPhrases.prompt);
 
-        if (userAnswer === null) return alert('Game over!');
-        if (userAnswer === '') {
-          alert('Wrong input');
+      if (userAnswer === null) return alert(langPhrases.gameOver);
+      if (userAnswer === '') {
+        alert(langPhrases.wrongInput);
+        start();
+      }
+
+      userAnswer.toLowerCase();
+      userAnswer = findLetters(userAnswer, lang);
+
+      if (!figures.includes(userAnswer)) {
+        alert(langPhrases.wrongInput);
+        start();
+      }
+
+      const computerAnswer = figures[getRandomNumber(0, 2)];
+
+      const getConfirm = () => {
+        const confirmQuestion = confirm(langPhrases.again);
+
+        if (confirmQuestion === false) {
+          return alert(`
+            Result:
+            Player: ${result.player}
+            Computer: ${result.computer}
+          `);
+        } else {
           start();
         }
+      };
 
-        userAnswer.toLowerCase();
-        userAnswer = findLetters(userAnswer, lang);
+      const isDraw = userAnswer === computerAnswer;
+      const isUserWin =
+        (userAnswer === langPhrases.rock &&
+          computerAnswer === langPhrases.scissors) ||
+        (userAnswer === langPhrases.paper &&
+          computerAnswer === langPhrases.rock) ||
+        (userAnswer === langPhrases.scissors &&
+          computerAnswer === langPhrases.paper);
+      const isComputerWin =
+        (computerAnswer === langPhrases.rock &&
+          userAnswer === langPhrases.scissors) ||
+        (computerAnswer === langPhrases.paper &&
+          userAnswer === langPhrases.rock) ||
+        (computerAnswer === langPhrases.scissors &&
+          userAnswer === langPhrases.paper);
 
-        if (!FIGURES_ENG.includes(userAnswer)) {
-          alert('Wrong input');
-          start();
-        }
-
-        const computerAnswer = FIGURES_ENG[getRandomNumber(0, 2)];
-
-        const getConfirm = () => {
-          const confirmQuestion = confirm('Again?');
-
-          if (confirmQuestion === false) {
-            return alert(`
-              Result:
-              Player: ${result.player}
-              Computer: ${result.computer}
-            `);
-          } else {
-            start();
-          }
-        };
-
-        const isDraw = userAnswer === computerAnswer;
-        const isUserWin =
-          (userAnswer === 'rock' && computerAnswer === 'scissors') ||
-          (userAnswer === 'paper' && computerAnswer === 'rock') ||
-          (userAnswer === 'scissors' && computerAnswer === 'paper');
-        const isComputerWin =
-          (computerAnswer === 'rock' && userAnswer === 'scissors') ||
-          (computerAnswer === 'paper' && userAnswer === 'rock') ||
-          (computerAnswer === 'scissors' && userAnswer === 'paper');
-
-        if (isDraw) {
-          alert('Draw');
-          getConfirm();
-        } else if (isUserWin) {
-          result.player += 1;
-          alert('You won!');
-          getConfirm();
-        } else if (isComputerWin) {
-          result.computer += 1;
-          alert('Computer won!');
-          getConfirm();
-        }
-      } else {
-        let userAnswer = prompt('камень, ножницы, бумага?');
-
-        if (userAnswer === null) return alert('Игра окончена!');
-        if (userAnswer === '') {
-          alert('Неправильный ввод');
-          start();
-        }
-
-        userAnswer.toLowerCase();
-        userAnswer = findLetters(userAnswer, lang);
-
-        if (!FIGURES_RUS.includes(userAnswer)) {
-          alert('Неправильный ввод');
-          start();
-        }
-
-        const computerAnswer = FIGURES_RUS[getRandomNumber(0, 2)];
-
-        const getConfirm = () => {
-          const confirmQuestion = confirm('Еще разок?');
-
-          if (confirmQuestion === false) {
-            return alert(`
-              Результат:
-              Игрок: ${result.player}
-              Компьютер: ${result.computer}
-            `);
-          } else {
-            start();
-          }
-        };
-
-        const isDraw = userAnswer === computerAnswer;
-        const isUserWin =
-          (userAnswer === 'камень' && computerAnswer === 'ножницы') ||
-          (userAnswer === 'бумага' && computerAnswer === 'камень') ||
-          (userAnswer === 'ножницы' && computerAnswer === 'бумага');
-        const isComputerWin =
-          (computerAnswer === 'камень' && userAnswer === 'ножницы') ||
-          (computerAnswer === 'бумага' && userAnswer === 'камень') ||
-          (computerAnswer === 'ножницы' && userAnswer === 'бумага');
-
-        if (isDraw) {
-          alert('Ничья');
-          getConfirm();
-        } else if (isUserWin) {
-          result.player += 1;
-          alert('Вы выиграли!');
-          getConfirm();
-        } else if (isComputerWin) {
-          result.computer += 1;
-          alert('Компьютер выиграл!');
-          getConfirm();
-        }
+      if (isDraw) {
+        alert(langPhrases.draw);
+        getConfirm();
+      } else if (isUserWin) {
+        result.player += 1;
+        alert(langPhrases.playerWon);
+        getConfirm();
+      } else if (isComputerWin) {
+        result.computer += 1;
+        alert(langPhrases.computerWon);
+        getConfirm();
       }
     };
   };
